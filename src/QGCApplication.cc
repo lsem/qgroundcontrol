@@ -254,6 +254,7 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
 
 void QGCApplication::setLanguage()
 {
+    showCriticalVehicleMessage("New one is set");
     _locale = QLocale::system();
     qCDebug(QGCApplicationLog) << "System reported locale:" << _locale << "; Name" << _locale.name() << "; Preffered (used in maps): " << (QLocale::system().uiLanguages().length() > 0 ? QLocale::system().uiLanguages()[0] : "None");
 
