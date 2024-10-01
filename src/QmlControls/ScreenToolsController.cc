@@ -54,7 +54,8 @@ ScreenToolsController::iOSDevice() const
 QString
 ScreenToolsController::fixedFontFamily() const
 {
-    return QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
+    //   return QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
+    return QString("Fira Mono");
 }
 
 QString
@@ -65,7 +66,7 @@ ScreenToolsController::normalFontFamily() const
     if(langID == QLocale::Korean) {
         return QString("NanumGothic");
     } else {
-        return QString("Open Sans");
+        return QString("Fira Sans");
     }
 }
 

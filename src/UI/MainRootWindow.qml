@@ -254,6 +254,53 @@ ApplicationWindow {
         visible:        false
     }
 
+    CriticalMessagesPanelModel {
+        id: theCriticalMessagesPanelModel
+    }
+
+    ListView {
+        id: theCriticalMessagesPanelListView
+        model: theCriticalMessagesPanelModel
+        delegate:
+	    Text {
+		text: message
+		color: QGroundControl.globalPalette.warningText // QGroundControl.globalPalette.colorOrange
+		font.pointSize:         ScreenTools.smallFontPixelHeight
+		font.family: ScreenTools.normalFontFamily
+            }
+
+	clip: true
+	focus: false
+
+	x: 50
+	y: 400
+	width: 450
+	height: 75
+	z: 11
+    }
+
+    // Simulated errors for testing
+    Timer {
+	interval: 4000
+	running: true
+	repeat: true
+	onTriggered: {
+	    showCriticalVehicleMessage("WARNING: Message")
+	}
+    }
+
+    Rectangle { // ListView Background (TODO: combine with listview)
+	anchors.fill: theCriticalMessagesPanelListView
+	radius: 5
+	color: QGroundControl.globalPalette.windowShadeDark
+	z: 10
+
+	anchors.leftMargin: -20
+	anchors.topMargin: -20
+	anchors.rightMargin: -20
+	anchors.bottomMargin: -20
+    }
+
     footer: LogReplayStatusBar {
         visible: QGroundControl.settingsManager.flyViewSettings.showLogReplayStatusBar.rawValue
     }
@@ -522,16 +569,18 @@ ApplicationWindow {
     //-- Critical Vehicle Message Popup
 
     function showCriticalVehicleMessage(message) {
-        indicatorPopup.close()
-        if (criticalVehicleMessagePopup.visible || QGroundControl.videoManager.fullScreen) {
-            // We received additional wanring message while an older warning message was still displayed.
-            // When the user close the older one drop the message indicator tool so they can see the rest of them.
-            criticalVehicleMessagePopup.dropMessageIndicatorOnClose = true
-        } else {
-            criticalVehicleMessagePopup.criticalVehicleMessage      = message
-            criticalVehicleMessagePopup.dropMessageIndicatorOnClose = false
-            criticalVehicleMessagePopup.open()
-        }
+	theCriticalMessagesPanelModel.append({ message: message })
+	
+        /* indicatorPopup.close() */
+        /* if (criticalVehicleMessagePopup.visible || QGroundControl.videoManager.fullScreen) { */
+        /*     // We received additional wanring message while an older warning message was still displayed. */
+        /*     // When the user close the older one drop the message indicator tool so they can see the rest of them. */
+        /*     criticalVehicleMessagePopup.dropMessageIndicatorOnClose = true */
+        /* } else { */
+        /*     criticalVehicleMessagePopup.criticalVehicleMessage      = message */
+        /*     criticalVehicleMessagePopup.dropMessageIndicatorOnClose = false */
+        /*     criticalVehicleMessagePopup.open() */
+        /* } */
     }
 
     Popup {
