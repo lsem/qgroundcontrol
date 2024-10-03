@@ -258,25 +258,81 @@ ApplicationWindow {
         id: theCriticalMessagesPanelModel
     }
 
+    Component {
+        id: theRowRectDelegate
+        Rectangle {
+            id: rowRectRect
+            width: theText.width + 30
+            height: 40
+            color: 'red'
+
+            SequentialAnimation {
+                loops: Animation.Infinite
+                running: true
+
+                PropertyAnimation {
+                    easing.type: Easing.InOutQuad
+                    target: rowRectRect
+                    property: "color"
+                    from: "black"
+                    to: "red"
+                    duration: 500
+                }
+                PropertyAnimation {
+                    easing.type: Easing.InOutQuad
+                    target: rowRectRect
+                    property: "color"
+                    from: "red"
+                    to: "black"
+                    duration: 500
+                }
+            }
+
+            Text {
+                id: theText
+                text: message
+                color: 'yellow'
+                font.family: 'Fira Mono'
+                font.pointSize: 14
+                font.bold: true
+                anchors.centerIn: parent
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    theCriticalMessagesPanelModel.remove(index)
+                }
+            }
+        }
+    }
+
     ListView {
         id: theCriticalMessagesPanelListView
         model: theCriticalMessagesPanelModel
-        delegate:
-	    Text {
-		text: message
-		color: QGroundControl.globalPalette.warningText // QGroundControl.globalPalette.colorOrange
-		font.pointSize:         ScreenTools.smallFontPixelHeight
-		font.family: ScreenTools.normalFontFamily
-            }
+        delegate: theRowRectDelegate
 
+	spacing: 6
 	clip: true
 	focus: false
 
 	x: 50
 	y: 400
 	width: 450
-	height: 75
+	height: 100
 	z: 11
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+	    propagateComposedEvents: true // propagate to element handlers
+            onEntered: {
+        	parent.clip = false
+            }
+            onExited: {
+        	parent.clip = true
+            }
+        }
+	
     }
 
     // Simulated errors for testing
@@ -285,7 +341,13 @@ ApplicationWindow {
 	running: true
 	repeat: true
 	onTriggered: {
-	    showCriticalVehicleMessage("WARNING: Message")
+            var random_words = ["corpse", "sandwitch", "strain", "conference", "page", "finished", "concerete"]
+            var random_phrase = []
+            for (var i = 0; i < Math.floor(Math.random() * 10 + 1); ++i) {
+                var random_index = Math.floor(Math.random() * random_words.length)
+                random_phrase.push(random_words[random_index])
+            }
+	    showCriticalVehicleMessage("WARNING: " + random_phrase.join(","))
 	}
     }
 
