@@ -352,7 +352,6 @@ ApplicationWindow {
 		y: 400
 		width: 450
 		height: 100
-		z: 11
 
 		MouseArea {
 		    anchors.fill: parent
