@@ -348,11 +348,6 @@ ApplicationWindow {
 		clip: true
 		focus: false
 
-		x: 50
-		y: 400
-		width: 450
-		height: 100
-
 		MouseArea {
 		    anchors.fill: parent
 		    hoverEnabled: true
