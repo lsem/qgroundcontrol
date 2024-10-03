@@ -294,9 +294,10 @@ ApplicationWindow {
                 id: theText
                 text: message
                 color: 'yellow'
-                font.family: 'Fira Mono'
-                font.pointSize: 14
-                font.bold: true
+                font.family:  ScreenTools.normalFontFamily
+                font.pointSize: ScreenTools.normalFontPointSize + 2
+		// TOOD: this seems to be not according to the guideline to use bold
+		font.bold: true
                 anchors.centerIn: parent
             }
             MouseArea {
@@ -649,109 +650,10 @@ ApplicationWindow {
     //-------------------------------------------------------------------------
     //-- Critical Vehicle Message Popup
 
+    // TODO: We have actually changed semantics and it is no longer just "show" and rather "append".
     function showCriticalVehicleMessage(message) {
 	theCriticalMessagesPanelModel.append({ message: message })
 	theCriticalMessagesPanel.showAnimated()
-	
-        /* indicatorPopup.close() */
-        /* if (criticalVehicleMessagePopup.visible || QGroundControl.videoManager.fullScreen) { */
-        /*     // We received additional wanring message while an older warning message was still displayed. */
-        /*     // When the user close the older one drop the message indicator tool so they can see the rest of them. */
-        /*     criticalVehicleMessagePopup.dropMessageIndicatorOnClose = true */
-        /* } else { */
-        /*     criticalVehicleMessagePopup.criticalVehicleMessage      = message */
-        /*     criticalVehicleMessagePopup.dropMessageIndicatorOnClose = false */
-        /*     criticalVehicleMessagePopup.open() */
-        /* } */
-    }
-
-    Popup {
-        id:                 criticalVehicleMessagePopup
-        y:                  ScreenTools.defaultFontPixelHeight
-        x:                  Math.round((mainWindow.width - width) * 0.5)
-        width:              mainWindow.width  * 0.55
-        height:             criticalVehicleMessageText.contentHeight + ScreenTools.defaultFontPixelHeight * 2
-        modal:              false
-        focus:              true
-        closePolicy:        Popup.CloseOnEscape
-
-        property alias  criticalVehicleMessage:        criticalVehicleMessageText.text
-        property bool   dropMessageIndicatorOnClose:   false
-
-        background: Rectangle {
-            anchors.fill:   parent
-            color:         '#ff0000'  // qgcPal.alertBackground
-            radius:         ScreenTools.defaultFontPixelHeight * 0.5
-            border.color:   qgcPal.alertBorder
-            border.width:   2
-
-            Rectangle {
-                anchors.horizontalCenter:   parent.horizontalCenter
-                anchors.top:                parent.top
-                anchors.topMargin:          -(height / 2)
-                color:                      qgcPal.alertBackground
-                radius:                     ScreenTools.defaultFontPixelHeight * 0.25
-                border.color:               qgcPal.alertBorder
-                border.width:               1
-                width:                      vehicleWarningLabel.contentWidth + _margins
-                height:                     vehicleWarningLabel.contentHeight + _margins
-
-                property real _margins: ScreenTools.defaultFontPixelHeight * 0.25
-
-                QGCLabel {
-                    id:                 vehicleWarningLabel
-                    anchors.centerIn:   parent
-                    text:               qsTr("Vehicle Error")
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    color:              qgcPal.alertText
-                }
-            }
-
-            Rectangle {
-                id:                         additionalErrorsIndicator
-                anchors.horizontalCenter:   parent.horizontalCenter
-                anchors.bottom:             parent.bottom
-                anchors.bottomMargin:       -(height / 2)
-                color:                      qgcPal.alertBackground
-                radius:                     ScreenTools.defaultFontPixelHeight * 0.25
-                border.color:               qgcPal.alertBorder
-                border.width:               1
-                width:                      additionalErrorsLabel.contentWidth + _margins
-                height:                     additionalErrorsLabel.contentHeight + _margins
-                visible:                    criticalVehicleMessagePopup.dropMessageIndicatorOnClose
-
-                property real _margins: ScreenTools.defaultFontPixelHeight * 0.25
-
-                QGCLabel {
-                    id:                 additionalErrorsLabel
-                    anchors.centerIn:   parent
-                    text:               qsTr("Additional errors received")
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    color:              qgcPal.alertText
-                }
-            }
-        }
-
-        QGCLabel {
-            id:                 criticalVehicleMessageText
-            width:              criticalVehicleMessagePopup.width - ScreenTools.defaultFontPixelHeight
-            anchors.centerIn:   parent
-            wrapMode:           Text.WordWrap
-            color:              qgcPal.alertText
-            textFormat:         TextEdit.RichText
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                criticalVehicleMessagePopup.close()
-                if (criticalVehicleMessagePopup.dropMessageIndicatorOnClose) {
-                    criticalVehicleMessagePopup.dropMessageIndicatorOnClose = false;
-                    QGroundControl.multiVehicleManager.activeVehicle.resetErrorLevelMessages();
-                    flyView.dropMessageIndicatorTool();
-                }
-            }
-        }
     }
 
     //-------------------------------------------------------------------------
