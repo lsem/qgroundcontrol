@@ -117,11 +117,13 @@ ApplicationWindow {
     function showPlanView() {
         flyView.visible = false
         planView.visible = true
+	theCriticalMessagesPanel.visible = false
     }
 
     function showFlyView() {
         flyView.visible = true
         planView.visible = false
+	theCriticalMessagesPanel.visible = true
     }
 
     function showTool(toolTitle, toolSource, toolIcon) {
@@ -306,34 +308,55 @@ ApplicationWindow {
         }
     }
 
-    ListView {
-        id: theCriticalMessagesPanelListView
-        model: theCriticalMessagesPanelModel
-        delegate: theRowRectDelegate
+    Item {
+	id: theCriticalMessagesPanel
 
-	spacing: 6
-	clip: true
-	focus: false
-
+	// TODO: finalize the positions.
+	width: 500
+	height: 150
 	x: 50
 	y: 400
-	width: 450
-	height: 100
-	z: 11
-
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-	    propagateComposedEvents: true // propagate to element handlers
-            onEntered: {
-        	parent.clip = false
-            }
-            onExited: {
-        	parent.clip = true
-            }
-        }
 	
+	Rectangle {
+	    id: theCriticalMessagesPanelRect
+
+	    radius: 5
+	    color: QGroundControl.globalPalette.windowShadeDark
+
+	    anchors.fill: parent
+
+	    ListView {
+		id: theCriticalMessagesPanelListView
+		model: theCriticalMessagesPanelModel
+		delegate: theRowRectDelegate
+		anchors.fill: parent
+		anchors.margins: 15
+
+		spacing: 6
+		clip: true
+		focus: false
+
+		x: 50
+		y: 400
+		width: 450
+		height: 100
+		z: 11
+
+		MouseArea {
+		    anchors.fill: parent
+		    hoverEnabled: true
+		    propagateComposedEvents: true
+		    onEntered: {
+        		parent.clip = false
+		    }
+		    onExited: {
+        		parent.clip = true
+		    }
+		}
+	    }
+	}
     }
+
 
     // Simulated errors for testing
     Timer {
@@ -349,18 +372,6 @@ ApplicationWindow {
             }
 	    showCriticalVehicleMessage("WARNING: " + random_phrase.join(","))
 	}
-    }
-
-    Rectangle { // ListView Background (TODO: combine with listview)
-	anchors.fill: theCriticalMessagesPanelListView
-	radius: 5
-	color: QGroundControl.globalPalette.windowShadeDark
-	z: 10
-
-	anchors.leftMargin: -20
-	anchors.topMargin: -20
-	anchors.rightMargin: -20
-	anchors.bottomMargin: -20
     }
 
     footer: LogReplayStatusBar {
