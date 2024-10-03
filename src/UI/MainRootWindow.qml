@@ -303,6 +303,9 @@ ApplicationWindow {
                 anchors.fill: parent
                 onClicked: {
                     theCriticalMessagesPanelModel.remove(index)
+		    if (theCriticalMessagesPanelModel.count === 0) {
+			theCriticalMessagesPanel.hideAnimated()
+		    }
                 }
             }
         }
@@ -316,7 +319,16 @@ ApplicationWindow {
 	height: 150
 	x: 50
 	y: 400
-	
+
+	Behavior on opacity {
+	    NumberAnimation {
+		duration: 200
+	    }
+	}
+
+	function showAnimated(){ opacity = 1.0 }
+	function hideAnimated() { opacity = 0.0 }
+
 	Rectangle {
 	    id: theCriticalMessagesPanelRect
 
@@ -643,6 +655,7 @@ ApplicationWindow {
 
     function showCriticalVehicleMessage(message) {
 	theCriticalMessagesPanelModel.append({ message: message })
+	theCriticalMessagesPanel.showAnimated()
 	
         /* indicatorPopup.close() */
         /* if (criticalVehicleMessagePopup.visible || QGroundControl.videoManager.fullScreen) { */
