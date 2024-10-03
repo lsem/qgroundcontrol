@@ -320,6 +320,8 @@ ApplicationWindow {
 	x: 50
 	y: 400
 
+	opacity: 0.0
+
 	Behavior on opacity {
 	    NumberAnimation {
 		duration: 200
