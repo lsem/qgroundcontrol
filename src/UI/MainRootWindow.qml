@@ -266,7 +266,7 @@ ApplicationWindow {
             id: rowRectRect
             width: theText.width + 30
             height: 40
-            color: 'red'
+	    color: '#e84b3d'
 
             SequentialAnimation {
                 loops: Animation.Infinite
@@ -277,14 +277,14 @@ ApplicationWindow {
                     target: rowRectRect
                     property: "color"
                     from: "black"
-                    to: "red"
+                    to: '#ff746c'
                     duration: 500
                 }
                 PropertyAnimation {
                     easing.type: Easing.InOutQuad
                     target: rowRectRect
                     property: "color"
-                    from: "red"
+                    from: '#ff746c'
                     to: "black"
                     duration: 500
                 }
@@ -293,9 +293,9 @@ ApplicationWindow {
             Text {
                 id: theText
                 text: message
-                color: 'yellow'
+                color: 'white'
                 font.family:  ScreenTools.normalFontFamily
-                font.pointSize: ScreenTools.normalFontPointSize + 2
+                font.pointSize: ScreenTools.normalFontPointSize + 4
 		// TOOD: this seems to be not according to the guideline to use bold
 		font.bold: true
                 anchors.centerIn: parent
